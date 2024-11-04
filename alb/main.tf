@@ -94,7 +94,7 @@ resource "aws_lb_target_group" "this" {
 }
 
 
-
+/*
 resource "aws_lb_target_group_attachment" "this" {
   count            = length(var.ec2_instance_ids)
 
@@ -102,7 +102,7 @@ resource "aws_lb_target_group_attachment" "this" {
   target_id        = var.ec2_instance_ids[count.index]
   port             = var.target_group_port
 }
-
+*/
 
 
 resource "aws_lb_listener" "this" {
