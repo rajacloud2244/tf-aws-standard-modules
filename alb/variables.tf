@@ -6,7 +6,7 @@ variable "create" {
 variable "access_logs" {
   type = list(object({
     bucket  = string
-    enabled = optional(bool, true)
+    enabled = bool
     prefix  = optional(string)
   }))
   default = []
