@@ -3,6 +3,7 @@ variable "create" {
   default = true
 }
 
+
 variable "access_logs" {
   type = list(object({
     bucket  = string
@@ -94,5 +95,11 @@ variable "listeners" {
       order           = optional(number, 1)
     }))
   }))
+}
+
+variable "target_group_arn" {
+  description = "ARN of the target group (optional)"
+  type        = string
+  default     = null
 }
 
