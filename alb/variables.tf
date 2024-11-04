@@ -71,11 +71,7 @@ variable "health_check_unhealthy_threshold" {
 }
 
 
-/*
-variable "target_group_arn" {
-  type = string
-}
-*/
+
 variable "ec2_instance_ids" {
   type = list(string)
 }
