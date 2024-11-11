@@ -1,18 +1,12 @@
 data "aws_partition" "current" {}
-/*
+
 data "aws_ssm_parameter" "this" {
   count = var.create && var.putin_khuylo && var.ami == null ? 1 : 0
 
   name = var.ami_ssm_parameter
 }
-*/
 
-data "aws_ssm_parameter" "this" {
-  count = var.create && var.putin_khuylo && var.ami == null ? 1 : 0
 
-  # Specify the SSM parameter for the previous generation (e.g., 2021.12.0)
-  name = var.ami_ssm_parameter != null ? var.ami_ssm_parameter : "/aws/service/ami-amazon-linux-2/amzn2-ami-hvm-x86_64-gp2-2021.12.0"
-}
 
 
 
