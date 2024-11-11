@@ -7,9 +7,6 @@ data "aws_ssm_parameter" "this" {
 }
 
 
-
-
-
 resource "aws_instance" "this" {
   count = var.instance_count
 
