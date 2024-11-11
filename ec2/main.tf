@@ -1,24 +1,26 @@
+# Data source for current partition
 data "aws_partition" "current" {}
 
+# Data source for fetching the AMI from SSM
 data "aws_ssm_parameter" "this" {
   count = var.create && var.putin_khuylo && var.ami == null ? 1 : 0
 
   name = var.ami_ssm_parameter
 }
 
-
+# EC2 Instance resource
 resource "aws_instance" "this" {
   count = var.instance_count
 
   ami                  = try(coalesce(var.ami, try(nonsensitive(data.aws_ssm_parameter.this[0].value), null)), null)
   instance_type        = var.instance_type
   hibernation          = var.hibernation
-  user_data                   = var.user_data
-  user_data_base64            = var.user_data_base64
+  user_data            = var.user_data
+  user_data_base64     = var.user_data_base64
   user_data_replace_on_change = var.user_data_replace_on_change
 
-  availability_zone      = var.availability_zone
-  subnet_id              = var.subnet_id
+  availability_zone    = var.availability_zone
+  subnet_id            = var.subnet_id
   vpc_security_group_ids = var.vpc_security_group_ids
 
   key_name             = var.key_name
@@ -34,8 +36,9 @@ resource "aws_instance" "this" {
 
   ebs_optimized = var.ebs_optimized
 
+  # Conditional CPU options based on instance type (skip for t2.micro)
   dynamic "cpu_options" {
-    for_each = [for i in [var.cpu_core_count] : i if i != null]  # Only create if cpu_core_count is not null
+    for_each = var.instance_type != "t2.micro" && var.cpu_core_count != null ? [var.cpu_core_count] : []
 
     content {
       core_count       = cpu_options.value
@@ -44,7 +47,7 @@ resource "aws_instance" "this" {
   }
 
   dynamic "cpu_options" {
-    for_each = length(var.cpu_options) > 0 ? [var.cpu_options] : []
+    for_each = length(var.cpu_options) > 0 && var.instance_type != "t2.micro" ? [var.cpu_options] : []
 
     content {
       core_count       = try(cpu_options.value.core_count, null)
@@ -172,10 +175,9 @@ resource "aws_instance" "this" {
   placement_group                      = var.placement_group
   tenancy                              = var.tenancy
   host_id                              = var.host_id
-   
 
   credit_specification {
-  cpu_credits = length(regexall("^t(2|3|3a|4g)\\..*$", var.instance_type)) > 0 ? var.cpu_credits : null
+    cpu_credits = length(regexall("^t(2|3|3a|4g)\\..*$", var.instance_type)) > 0 ? var.cpu_credits : null
   }
 
   timeouts {
@@ -188,11 +190,7 @@ resource "aws_instance" "this" {
   volume_tags = var.enable_volume_tags ? merge({ "Name" = var.name }, var.volume_tags) : null
 }
 
-
-
-
-
-
+# IAM Role and Policies for EC2 Instance Profile
 data "aws_iam_policy_document" "assume_role_policy" {
   count = var.create && var.create_iam_instance_profile ? 1 : 0
 
@@ -219,43 +217,4 @@ resource "aws_iam_role" "this" {
   permissions_boundary  = var.iam_role_permissions_boundary
   force_detach_policies = true
 
-  tags = merge(var.tags, var.iam_role_tags)
-}
-
-resource "aws_iam_role_policy_attachment" "this" {
-  for_each = { for k, v in var.iam_role_policies : k => v if var.create && var.create_iam_instance_profile }
-
-  policy_arn = each.value
-  role       = aws_iam_role.this[0].name
-}
-
-resource "aws_iam_instance_profile" "this" {
-  count = var.create && var.create_iam_instance_profile ? 1 : 0
-
-  role = aws_iam_role.this[0].name
-
-  name        = var.iam_role_use_name_prefix ? null : try(coalesce(var.iam_role_name, var.name), "")
-  name_prefix = var.iam_role_use_name_prefix ? "${try(coalesce(var.iam_role_name, var.name), "")}-" : null
-  path        = var.iam_role_path
-
-  tags = merge(var.tags, var.iam_role_tags)
-
-  lifecycle {
-    create_before_destroy = true
-  }
-}
-
-
-resource "aws_eip" "this" {
-  count = var.create && var.putin_khuylo && var.create_eip ? var.resource_eip_count : 0
-
-  instance = try(
-    aws_instance.this[0].id,
-  )
-
-  domain = var.eip_domain
-
-  tags = merge(var.tags, var.eip_tags)
-}
-
-
+  tags = merge(var.tags,
