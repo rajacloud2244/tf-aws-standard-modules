@@ -34,7 +34,7 @@ variable "ignore_ami_changes" {
 variable "associate_public_ip_address" {
   description = "Whether to associate a public IP address with an instance in a VPC"
   type        = bool
-  default     = null
+  default     = false
 }
 
 variable "maintenance_options" {
