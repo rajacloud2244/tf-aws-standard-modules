@@ -1,4 +1,4 @@
-/*
+
 
 ################################################################################
 # File System Policy
@@ -94,7 +94,7 @@ data "aws_iam_policy_document" "policy" {
       condition {
         test     = "Bool"
         variable = "elasticfilesystem:AccessedViaMountTarget"
-        values   = ["true"]
+        values   = ["false"]
       }
     }
   }
@@ -109,4 +109,4 @@ resource "aws_efs_file_system_policy" "this" {
 }
 
 
-*/
+
