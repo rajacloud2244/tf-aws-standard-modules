@@ -187,7 +187,7 @@ variable "create_backup_policy" {
 variable "enable_backup_policy" {
   description = "Determines whether a backup policy is `ENABLED` or `DISABLED`"
   type        = bool
-  default     = true
+  default     = false
 }
 
 ################################################################################
