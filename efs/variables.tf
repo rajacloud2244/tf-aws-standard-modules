@@ -1,4 +1,4 @@
-variable "create" {
+/*variable "create" {
   description = "Determines whether resources will be created (affects all resources)"
   type        = bool
   default     = true
@@ -205,3 +205,4 @@ variable "replication_configuration_destination" {
   type        = any
   default     = {}
 }
+*/
