@@ -9,7 +9,7 @@ resource "aws_efs_file_system" "this" {
   creation_token                  = var.creation_token
   performance_mode                = var.performance_mode
   encrypted                       = var.encrypted
-  kms_key_id                      = var.kms_key_arn
+  #kms_key_id                      = var.kms_key_arn
   provisioned_throughput_in_mibps = var.provisioned_throughput_in_mibps
   throughput_mode                 = var.throughput_mode
 
