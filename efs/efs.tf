@@ -95,35 +95,6 @@ resource "aws_security_group_rule" "this" {
 ################################################################################
 
 
-# Access point(s)
-access_points = {
-  posix_example = {
-    name = "posix-example"
-    posix_user = {
-      gid            = 1001
-      uid            = 1001
-      secondary_gids = [1002]
-    }
 
-    root_directory = {
-      posix_user = {
-        gid            = 1001
-        uid            = 1001
-        secondary_gids = [1002]
-      }
-
-      path = "/example"
-
-      creation_info = {
-        owner_gid   = 1001
-        owner_uid   = 1001
-        permissions = "755"
-      }
-    }
-
-    tags = {
-      Additionl = "yes"
-    }
-  }
 }
 
