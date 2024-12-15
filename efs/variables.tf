@@ -44,11 +44,11 @@ variable "encrypted" {
   default     = true
 }
 
-variable "kms_key_arn" {
-  description = "The ARN for the KMS encryption key. When specifying `kms_key_arn`, encrypted needs to be set to `true`"
-  type        = string
-  default     = null
-}
+#variable "kms_key_arn" {
+# description = "The ARN for the KMS encryption key. When specifying `kms_key_arn`, encrypted needs to be set to `true`"
+# type        = string
+#default     = null
+#}
 
 variable "provisioned_throughput_in_mibps" {
   description = "The throughput, measured in MiB/s, that you want to provision for the file system. Only applicable with `throughput_mode` set to `provisioned`"
