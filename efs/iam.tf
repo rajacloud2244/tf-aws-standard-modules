@@ -1,4 +1,3 @@
-
 ################################################################################
 # File System Policy
 ################################################################################
@@ -106,4 +105,3 @@ resource "aws_efs_file_system_policy" "this" {
   bypass_policy_lockout_safety_check = var.bypass_policy_lockout_safety_check
   policy                             = data.aws_iam_policy_document.policy[0].json
 }
-
