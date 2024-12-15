@@ -76,7 +76,7 @@ data "aws_iam_policy_document" "policy" {
 
     content {
       sid    = "NonSecureTransportAccessedViaMountTarget"
-      effect = "Allow"
+      effect = "Deny2"
       actions = [
         "elasticfilesystem:ClientRootAccess",
         "elasticfilesystem:ClientWrite",
