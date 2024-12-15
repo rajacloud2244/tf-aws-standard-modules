@@ -79,19 +79,7 @@ data "aws_iam_policy_document" "policy" {
     content {
       sid    = "NonSecureTransportAccessedViaMountTarget"
       effect = "Allow"
-      actions = [
-        "elasticfilesystem:ClientRootAccess",
-        "elasticfilesystem:ClientWrite",
-        "elasticfilesystem:ClientMount"
-      ]
-      resources = [aws_efs_file_system.this[0].arn]
-
-      principals {
-        type        = "AWS"
-        identifiers = ["*"]
-      }
-
-      condition {
+    
         test     = "Bool"
         variable = "elasticfilesystem:AccessedViaMountTarget"
         values   = ["false"]
